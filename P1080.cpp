@@ -1,97 +1,82 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int NR = 5500;
-struct ii{
-	int a[NR],len;
-	ii(){
-		memset(a,0,sizeof(a));
-		len = 1;
-	}
-	void read(){
-		char s[NR];
-		scanf("%s",s);
-		len = strlen(s);
-		for(int i = 1;i <= len;i++)
-			a[i] = s[len - i] - '0';
-	}
-	void print(){
-		for(int i = len;i >= 1;i--)
-			putchar(a[i] + '0');
-		puts("");
-	}
-	ii operator+(const ii b)const{
-		ii ans;
-		ans.len = max(len,b.len);
-		for(int i = 1;i <= ans.len;i++){
-			ans.a[i] += a[i] + b.a[i];
-			ans.a[i + 1] = ans.a[i] / 10;
-			ans.a[i] %= 10;
-		}
-		if(ans.a[ans.len + 1] > 0)
-			ans.a[0]++;
-		return ans;
-	}
-	ii operator*(const ii b)const{
-		ii ans;
-		for(int i = 1;i <= len;i++)
-			for(int j = 1;j <= b.len;j++)
-				ans.a[i + j - 1] += a[i] * b.a[j];
-		ans.len = len + b.len + 1;
-		for(int i = 1;i < ans.len;i++){
-			ans.a[i + 1] += ans.a[i] / 10;
-			ans.a[i] %= 10;
-		}
-		while(ans.a[ans.len] == 0 && ans.len > 1)
-			ans.len--;
-		return ans;
-	}
-	ii operator/(const int b)const{
-		ii ans = *this;
-		ans.a[ans.len + 1] = 0;
-		for(int i = ans.len;i >= 1;i--)
-			ans.a[i] += ans.a[i + 1] % b * 10;
-		for(int i = ans.len;i >= 1;i--)
-			ans.a[i] /= b;
-		while(ans.a[ans.len] == 0 && ans.len > 1)
-			ans.len--;
-		return ans;
-	}
-	bool operator<(const ii b)const{
-		if(len != b.len)
-			return len < b.len;
-		for(int i = len;i >= 1;i--)
-			if(a[i] != b.a[i])
-				return a[i] < b.a[i];
-		return false;
-	}
-	bool operator>(const ii b)const{
-		return !(*this < b) && *this != b;
-	}
-	bool operator<=(const ii b)const{
-		return *this < b || *this == b;
-	}
-	bool operator>=(const ii b)const{
-		return !(*this > b);
-	}
-};
+const int NR = 1e5;
+int n,a[NR] = {1},b[NR] = {1},ans[NR] = {1},t[NR] = {1},tmp[NR] = {1};
+int x;
 
-int n,a[NR],b[NR];
+void read(int a[]){
+	char s[NR];
+	scanf("%s",s);
+	a[0] = strlen(s);
+	for(int i = 1;i <= a[0];i++)
+		a[i] = s[a[0] - i] - '0';
+}
+
+void print(int a[]){
+	for(int i = a[0];i >= 1;i--)
+		cout<<a[i];
+	puts("");
+}
+
+void Time(int a[],int b,int ans[]){
+	ans[0] = a[0] + 1;
+	for(int i = 1;i <= ans[0];i++)
+		ans[i] = a[i] * b;
+	for(int i = 1;i < ans[0];i++){
+		ans[i + 1] += ans[i] / 10;
+		ans[i] %= 10;
+	}
+	while(ans[ans[0]] >= 10){
+		ans[ans[0] + 1] = ans[ans[0]] / 10;
+		ans[ans[0]] %= 10;
+		ans[0]++;
+	}
+	while(ans[ans[0]] == 0 && ans[0] > 1)
+		ans[0]--;
+}
+void div(int a[],int b,int ans[]){
+	ans[0] = a[0];
+	for(int i = 1;i <= a[0];i++)
+		ans[i]=  a[i];
+	ans[ans[0] + 1] = 0;
+	for(int i = ans[0];i >= 1;i--)
+		ans[i] += ans[i + 1] % b * 10;
+	for(int i = ans[0];i >= 1;i--)
+		ans[i] /= b;
+	while(ans[ans[0]] == 0)
+		ans[0]--;
+}
+
+bool cmp(int a[],int b[]){
+	if(a[0] != b[0])
+		return a[0] < b[0];
+	for(int i = a[0];i >= 1;i--)
+		if(a[i] != b[i])
+			return a[i] < b[i];
+	return false;
+}
+
 int main()
 {
-	int n;
-	scanf("%d", &n);
-	for (int i = 0; i <= n; i++)
-		scanf("%d%d", a + i, b + i);
-	for (int i = 1; i <= n; i++)
-		for (int j = i + 1; j <= n; j++)
-			if (a[i] * b[i] > a[j] * b[j]) swap(a[i], a[j]), swap(b[i], b[j]);
-	t[1] = 1;
-	t = t * a[0];
+	cin>>n;
+	for(int i = 0;i <= n;i++)
+		cin>>a[i]>>b[i];
+	for(int i = 1;i <= n;i++)
+		for(int j = i + 1;j <= n;j++)
+			if(a[i] * b[i] > a[j] * b[j]){
+				swap(a[i],a[j]);
+				swap(b[i],b[j]);
+			}
+	memset(t,0,sizeof(t));
+	t[0] = t[1] = 1;
+	Time(t,a[0],t);
 	for(int i = 1;i <= n;i++){
-		ans = max(ans,t / b[i]);
-		t = t * a[i];
+		div(t,b[i],tmp);
+		if(cmp(ans,tmp))
+			memcpy(ans,tmp,sizeof(tmp));
+		Time(t,a[i],t);
 	}
-	ans.print();
+	print(ans);
 	return 0;
 }
