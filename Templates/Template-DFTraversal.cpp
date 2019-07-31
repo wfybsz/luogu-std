@@ -2,7 +2,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 const int N=1e5+10;
-vector<int> G[N];
+vector<int>G[N];
 void addedge(int u,int v){
 	G[u].push_back(v);
 	G[v].push_back(u);
