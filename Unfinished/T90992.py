@@ -7,7 +7,7 @@ nlm = 0
 nms = 0
 nss = 0
 mod = 19260817
-n = 1000000000000000000
+n = int(input())
 if n == 0:
     print(0)
 else:
