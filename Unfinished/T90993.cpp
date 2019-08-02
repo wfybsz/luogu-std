@@ -12,6 +12,6 @@ double dist(int x1,int y1,int x2,int y2){
 int main()
 {
 	cin>>a.x>>a.y>>p.x>>p.y>>s.x>>s.y;
-	
+	printf("%.2f",dist(a.x,a.y,p.x,p.y));
 	return 0;
 }
