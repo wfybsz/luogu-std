@@ -4,19 +4,10 @@
 #include<cmath>
 using namespace std;
 
-int gys(int a,int b){
-	for(;;){
-		if(a > b)
-			a -= b;
-		if(a < b)
-			b -= a;
-		if(a == b)
-			return a;
-	}
-}
+int gcd(int a,int b){return b?gcd(b,a % b):a;}
 
 int gbs(int x,int y){
-	return (x * y) / gys(x,y);
+	return (x * y) / gcd(x,y);
 }
 
 int main()
@@ -25,7 +16,7 @@ int main()
 	cin>>x0>>y0;
 	for(int i = x0;i <= y0;i += x0){
 		for(int j = x0;j <= y0;j += x0){
-			if(gys(i,j) == x0 && gbs(i,j) == y0)
+			if(gcd(i,j) == x0 && gbs(i,j) == y0)
 				cnt++;
 		}
 	}
