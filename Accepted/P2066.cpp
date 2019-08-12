@@ -1,53 +1,43 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int NR = 100;
-int n,a[NR],cnt;
-int flag[NR][NR];
+const int NR = 1e3;
+int n,m,a[NR][NR],num[NR],ans[NR],maxn;
 
-void put(int step,int i){
-    flag[step][i]++;
-    for(int x = step + 1;x <= n;x++){
-        flag[x][step + i - x]++;
-        flag[x][i]++;
-        flag[x][x + i - step]++;
-    }
+int cal(){
+	int cnt = 0;
+	for(int i = 1;i <= n;i++)
+		cnt += a[i][num[i]];
+	return cnt;
 }
 
-void undo(int step,int i){
-    flag[step][i]--;
-    for(int x = step + 1;x <= n;x++){
-        flag[x][step + i - x]--;
-        flag[x][i]--;
-        flag[x][x + i - step]--;
-    }
-}
-
-void dfs(int step){
-    if(step > n){
-        if(cnt <= 2){
-            for(int i = 1;i <= n;i++)
-            cout<<a[i]<<' ';
-            puts("");
-        }
-        cnt++;
-        return;
-    }
-    for(int i = 1;i <= n;i++){
-        if(flag[step][i]){
-            continue;
-        }
-        a[step] = i;
-        put(step,i);
-        dfs(step + 1);
-        undo(step,i);
-    }
+void dfs(int tot,int step){
+	if(tot < 0)
+		return;
+	if(step == n){
+		num[step] = tot;
+		if(cal() > maxn){
+			maxn = cal();
+			for(int i = 1;i <= step;i++)
+				ans[i] = num[i];
+		}
+		return;
+	}
+	for(int i = 0;i <= tot;i++){
+		num[step] = i;
+		dfs(tot - i,step + 1);
+	}
 }
 
 int main()
 {
-    cin>>n;
-    dfs(1);
-    cout<<cnt;
-    return 0;
+	cin>>n>>m;
+	for(int i = 1;i <= n;i++)
+		for(int j = 1;j <= m;j++)
+			cin>>a[i][j];
+	dfs(m,1);
+	cout<<maxn<<endl;
+	for(int i = 1;i <= n;i++)
+		cout<<i<<' '<<ans[i]<<endl;
+	return 0;
 }
