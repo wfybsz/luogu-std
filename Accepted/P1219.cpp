@@ -34,9 +34,8 @@ void dfs(int step){
 		return;
 	}
 	for(int i = 1;i <= n;i++){
-		if(flag[step][i]){
+		if(flag[step][i])
 			continue;
-		}
 		a[step] = i;
 		put(step,i);
 		dfs(step + 1);
