@@ -27,7 +27,7 @@ void dfs(int step){
 	if(step > n){
 		if(cnt <= 2){
 			for(int i = 1;i <= n;i++)
-			cout<<a[i]<<' ';
+				cout<<a[i]<<' ';
 			puts("");
 		}
 		cnt++;
