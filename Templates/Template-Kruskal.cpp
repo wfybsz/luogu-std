@@ -1,4 +1,4 @@
-struct UnionSet {
+struct UnionSet{
     int f[MAXN];
     UnionSet(int n) {
         for (int i = 1; i <= n; i++) {
