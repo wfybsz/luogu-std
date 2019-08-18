@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int n,tmp,maxn = -1,minn = 2147483647;
+int n,tmp,ans,minn = 2147483647;
 
 int main()
 {
@@ -9,8 +9,8 @@ int main()
     while(n--){
         cin>>tmp;
         minn = min(minn,tmp);
-        maxn = max(maxn,tmp);
+        ans = max(tmp - minn,ans);
     }
-    cout<<maxn - minn;
+    cout<<ans;
     return 0;
 }
