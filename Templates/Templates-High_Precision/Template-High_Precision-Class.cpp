@@ -1,3 +1,6 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int MAXN = 1000000;
 class HP{
 private:
 	int len,s[MAXN];

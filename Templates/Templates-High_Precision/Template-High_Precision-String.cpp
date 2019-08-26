@@ -1,3 +1,6 @@
+#include <bits/stdc++.h>
+using namespace std;
+const int L = 1000;
 string add(string a,string b){
 	string ans;
 	int na[L] = {0},nb[L] = {0};
@@ -156,4 +159,8 @@ string div(string n1,string n2,int nn){
 		return s;
 	if(nn == 2)
 		return v;
+}
+
+int main(){
+	return 0;
 }
