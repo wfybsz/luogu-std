@@ -2,7 +2,7 @@
 using namespace std;
 
 const int NR = 10010;
-int n,w,a[NR],mem[NR][NR / 100 + 1];
+int n,w,a[NR],mem[NR][110];
 
 int dfs(int t,int tree,int move){
     if(t > n)
