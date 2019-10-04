@@ -18,7 +18,7 @@ int main()
 		cin>>a[i].n>>a[i].s;
 	sort(a + 1,a + n + 1,cmp);
 	for(int i = 1;i <= n;++i){
-		//dp[i] = 
+		//dp[i] =
 	}
 	return 0;
 }
