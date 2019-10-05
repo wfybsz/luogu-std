@@ -3,7 +3,7 @@ using namespace std;
 typedef long long ll;
 
 const int NR = 1e3 + 10;
-int n,dp[NR],sum[NR],maxn = -2e9;
+int n,dp[NR],sum[NR];
 
 int main()
 {
