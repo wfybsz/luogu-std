@@ -1,2 +1,2 @@
 # luogu-std
-My stds for subject in luogu.org, most are C++.
+My stds for subject in [LuoguOnlineJudge](https://www.luogu.org/space/show?uid=122689), most are C++.
