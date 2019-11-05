@@ -1,77 +1,159 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int maxn = 1e5;
-
-class ii{
-private:
-	int len,a[maxn];
-	void fl(const int l){
-		len = l;
-		for(int i = 1;i <= len;++i){
-			a[i + 1] += a[i] / 10;
-			a[i] %= 10;
+struct ii:vector<int>{
+	ii(int n=0){
+		push_back(n);
+		check();
+	}
+	ii& check(){
+		while(!empty()&&!back())pop_back();
+		if(empty())return *this;
+		for(int i=1;i<size();++i){
+			(*this)[i]+=(*this)[i-1]/10;
+			(*this)[i-1]%=10;
 		}
-		while(!a[len])
-			--len;
-	}
-public:
-	ii(int x = 0){
-		memset(a,0,sizeof(a));
-		for(len = 1;x;++len){
-			a[len] = x % 10;
-			x /= 10;
+		while(back()>=10){
+			push_back(back()/10);
+			(*this)[size()-2]%=10;
 		}
-		--len;
-	}
-	void read(){
-		ii();
-		string s;
-		cin>>s;
-		len = s.length();
-		for(int i = 0;s[i] != '\0';++i)
-			a[len - i] = s[i] - '0';
-	}
-	void print(){
-		for(int i = max(len,1);i >= 1;--i)
-			putchar(a[i] + '0');
-	}
-	int& operator[](const int i){
-		return a[i];
-	}
-	ii operator+(const ii b)const{
-		ii ret;
-		int ln = max(len,b.len);
-		for(int i = 1;i <= ln;++i)
-			ret[i] += (*this).a[i] + b.a[i];
-		ret.fl(ln + 1);
-		return ret;
-	}
-	ii operator*(const int b)const{
-		ii ret;
-		int ln = len;
-		for(int i = 1;i <= ln;++i)
-			ret[i] = a[i] * b;
-		ret.fl(ln + 12);
-		return ret;
+		return *this;
 	}
 };
 
-istream& operator>>(ii& x,istream& is){
-	x.read();
+istream& operator>>(istream &is,ii &n){
+	string s;
+	is>>s;
+	n.clear();
+	for(int i=s.size()-1;i>=0;--i)
+		n.push_back(s[i]-'0');
 	return is;
 }
 
-ostream& operator<<(ii& x,ostream& os){
-	x.print();
+ostream& operator<<(ostream &os,const ii &n){
+	if(n.empty())os<<0;
+	for(int i=n.size()-1;i>=0;--i)os<<n[i];
 	return os;
 }
 
-int main(){
-	ii qwq,QAQ,OvO;
-	qwq.read();
-	QAQ.read();
-	OvO = qwq + QAQ;
-	OvO.print();
+bool operator!=(const ii &a,const ii &b){
+	if(a.size()!=b.size())return 1;
+	for(int i=a.size()-1;i>=0;--i)
+		if(a[i]!=b[i])return 1;
+	return 0;
+}
+
+bool operator==(const ii &a,const ii &b){
+	return !(a!=b);
+}
+
+bool operator<(const ii &a,const ii &b){
+	if(a.size()!=b.size())return a.size()<b.size();
+	for(int i=a.size()-1;i>=0;--i)
+		if(a[i]!=b[i])return a[i]<b[i];
+	return 0;
+}
+
+bool operator>(const ii &a,const ii &b){
+	return b<a;
+}
+
+bool operator<=(const ii &a,const ii &b){
+	return !(a>b);
+}
+
+bool operator>=(const ii &a,const ii &b){
+	return !(a<b);
+}
+
+ii& operator+=(ii &a,const ii &b){
+	if(a.size()<b.size())
+		a.resize(b.size());
+	for(int i=0;i!=b.size();++i)
+		a[i]+=b[i];
+	return a.check();
+}
+
+ii operator+(ii a,const ii &b){
+	return a+=b;
+}
+
+ii& operator-=(ii &a,ii b){
+	if(a<b)
+		swap(a,b);
+	for(int i=0;i!=b.size();a[i]-=b[i],++i)
+		if(a[i]<b[i]){
+			int j=i+1;
+			while(!a[j])
+				++j;
+			while(j>i){
+				--a[j];
+				a[--j]+=10;
+			}
+		}
+	return a.check();
+}
+
+ii operator-(ii a,const ii &b){
+	return a-=b;
+}
+
+ii operator*(const ii &a,const ii &b){
+	ii n;
+	n.assign(a.size()+b.size()-1,0);
+	for(int i=0;i!=a.size();++i)
+		for(int j=0;j!=b.size();++j)
+			n[i+j]+=a[i]*b[j];
+	return n.check();
+}
+
+ii& operator*=(ii &a,const ii &b){
+	return a=a*b;
+}
+
+ii divmod(ii &a,const ii &b){
+	ii ans;
+	for(int t=a.size()-b.size();a>=b;--t){
+		ii d;
+		d.assign(t+1,0);
+		d.back()=1;
+		ii c=b*d;
+		while(a>=c){
+			a-=c;
+			ans+=d;
+		}
+	}
+	return ans;
+}
+
+ii operator/(ii a,const ii &b){
+	return divmod(a,b);
+}
+
+ii& operator/=(ii &a,const ii &b){
+	return a=a/b;
+}
+
+ii& operator%=(ii &a,const ii &b){
+	divmod(a,b);
+	return a;
+}
+
+ii operator%(ii a,const ii &b){
+	return a%=b;
+}
+
+ii pow(const ii &n,const ii &k){
+	if(k.empty())
+		return 1;
+	if(k==2)
+		return n*n;
+	if(k.back()%2)
+		return n*pow(n,k-1);
+	return pow(pow(n,k/2),2);
+}
+
+int main()
+{
 	return 0;
 }
