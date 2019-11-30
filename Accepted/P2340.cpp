@@ -20,7 +20,7 @@ int main()
 		}
 	for(int i = 0;i <= MR;++i)
 		if(dp[n][i + MR] >= 0)
-			ans = max(ans,dp[n][i + MR] + j);
+			ans = max(ans,dp[n][i + MR] + i);
 	cout<<ans<<endl;
 	return 0;
 }
