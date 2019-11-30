@@ -15,7 +15,7 @@ int main()
 	for(int i = 1;i <= n;++i)
 		for(int j = m;j >= v[i];--j)
 			if(j >= v[i])
-				dp[j]=max(dp[j],dp[j - v[i]] + w[i]);
+				dp[j] = max(dp[j],dp[j - v[i]] + w[i]);
 	cout<<dp[m];
 	return 0;
 }
