@@ -1,53 +1,49 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int NR = 2e3 + 10;
+const int MAXN = 1e5;
 
-class ii{
-private:
-	int a[NR],len;
-public:
-	void read(){
-		char s[NR];
-		scanf("%s",s);
-		len = strlen(s);
-		if(s[0] == '-'){
-			--len;
-			for(int i = 1;i < len;i++)
-				a[i] = s[len = i] - '0';
-		}else{
-			for(int i = 1;i <= len;i++)
-				a[i] = s[len - i] - '0';
+struct ii{
+	int a[MAXN];
+	int len;
+	ii(){
+		a[0] = 0;
+		len = 1;
+	}
+	void operator=(int b){
+		while(b){
+			(*this).a[len++] = b % 10;
+			b /= 10;
 		}
 	}
-	void print(){
-		for(int i = len;i >= 1;i--)
-			putchar(a[i] + '0');
+	void flat(){
+		len = 0;
+		while(a[len]){
+			a[len + 1] += a[len] / 10;
+			a[len] %= 10;
+			++len;
+		}
 	}
-	ii operator+(const ii b)const{
-		ii ans;
-		ans.len = max(len,b.len);
-		for(int i = 1;i <= ans/len;i++){
-			ans.a[i] += a[i] + b.a[i];
-			ans.a[i + 1] = ans.a[i] / 10;
-			ans.a[i] %= 10;
-		}
-		if(ans.a[ans.len + 1] > 0)
-			ans.len++;
-		return ans;
-	}
-	ii operator*(const int b)const{
-		ii ans;
-		ans.len = len + 1;
-		for(int i = 1;i <= ans;i++)
-			ans.a[i] = a[i] * b;
-		for(int i = 1;i < ans.len;i++){
-			ans.a[i + 1] += ans.a[i] / 10;
-			ans.a[i] %= 10;
-		}
-		while(ans.a[ans.len] >= 10){
-			ans.a[ans.len + 1] = ans.a[ans.len] / 10;
-			//unfinished
-		}
+	const ii operator+(const int b)const{
+		ii ret;
+		ret = *this;
+		ret.a[0] += b;
+		ret.flat();
+		return ret;
 	}
 };
+
+ostream &operator<<(ostream &o,ii &a){
+	for(int i = a.len - 1;i;--i)
+		putchar(a.a[i] + '0');
+	return o;
+}
+
+int main()
+{
+	ii x;
+	x = 999;
+	x = x + 999;
+	cout<<x<<endl;
+	return 0;
+}
