@@ -1,11 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-int t,n;
+double a;
+int b;
 
 int main()
 {
-	cin>>t>>n;
-	printf("%.3f\n%d",1. * t / n,n * 2);
+	cin>>a>>b;
+	printf("%.3f\n%d",1. * a / b,b * 2);
 	return 0;
 }
