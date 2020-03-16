@@ -27,7 +27,7 @@ bool check(int n){
 	memset(used,0,sizeof(used));
 	int pos = s.length() - 1;
 	used[s[pos] - '0'] = 1;
-	while(!finished()){
+	while(not(finished())){
 		pos -= s[pos] - '0';
 		pos = (pos + s.length() * 10) % s.length();
 		if(used[s[pos] - '0'])
