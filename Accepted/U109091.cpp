@@ -6,7 +6,7 @@ bool used[10],flag[10];
 
 bool finished(){
 	for(int i = 1;i < 10;++i)
-		if(flag[i] == true && used[i] == false)
+		if(flag[i] == true and used[i] == false)
 			return false;
 	return true;
 }
