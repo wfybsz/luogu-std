@@ -51,19 +51,19 @@ int main()
 			++cd;
 		}else{
 			cx += dir[cd][1];
-			cy += dir[cd][2]; 
+			cy += dir[cd][2];
 		} 
 		if(a[fx + dir[fd][1]][fy + dir[fd][2]] == -1){//fj change dir
 			fd %= 4;
 			++fd;
 		}else{
 			fx += dir[fd][1];
-			fy +=dir[fd][2]; 
-		} 
+			fy += dir[fd][2];
+		}
 		if(cx == fx && cy == fy){//catch
 			cout<<t;
 			return 0;
-		} 
-	} 
+		}
+	}
 	return 0;
 }
