@@ -2,51 +2,56 @@
 using namespace std;
 
 const int NR = 1e5 + 10;
-int n,m,k,p,tmp;
-bool removed[NR];
-
+int n,m,k,p;
 struct node{
-	int idx;
-	node *next;
-};
+	int id;
+	node *next,*prev;
+	node(){
+		id = 0;
+		next = prev = NULL;
+	}
+}*a[NR];
 
-void ins(node *p,node *a){
-	a->next = p->next;
-	p->next = a;
+void ins(int x,node *p){
+	a[x] = new node;
+	a[x]->id = x;
+	a[x]->next = p->next;
+	a[x]->next->prev = a[x];
+	a[x]->prev = p;
+	p->next = a[x];
+}
+
+void del(int x){
+	a[x]->prev->next = a[x]->next;
+	a[x]->next->prev = a[x]->prev;
+	a[x]->id = 0;
 }
 
 int main()
 {
-	node *head = new node;
-	head->next = NULL;
-	node *t = new node;
-	t->idx = 1;
-	ins(head,t);
 	cin>>n;
+	a[0] = new node;
+	a[1] = new node;
+	a[1]->id = 1;
+	a[0]->next = a[1];
+	a[1]->prev = a[0];
+	a[1]->next = a[0];
 	for(int i = 2;i <= n;++i){
 		cin>>k>>p;
-		for(node *now = head;now != NULL;now = now->next)
-			if(p?now->idx == k:now->next->idx == k){
-				node *t = new node;
-				t->idx = i;
-				ins(now,t);
-				break;
-			}
+		if(p)
+			ins(i,a[k]);
+		else
+			ins(i,a[k]->prev);
 	}
 	cin>>m;
 	while(m--){
-		cin>>tmp;
-		if(removed[tmp])
+		cin>>k;
+		if(a[k]->id == 0)
 			continue;
-		removed[tmp] = true;
-		for(node *now = head->next;now != NULL;now = now->next)
-			if(now->next->idx == tmp){
-				now->next = now->next->next;
-				break;
-			}
+		del(k);
 	}
-	for(node *now = head->next;now != NULL;now = now->next)
-		cout<<now->idx<<' ';
+	for(node *p = a[0]->next;p != a[0];p = p->next)
+		cout<<p->id<<' ';
 	putchar('\n');
 	return 0;
 }
