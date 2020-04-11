@@ -11,7 +11,7 @@ struct node{
 
 int main()
 {
-	while(scanf("%s",s) == 1){
+	while(scanf("%s",s) != EOF){
 		node *head = new node,*tail,*now;
 		head->next = NULL;
 		now = tail = head;
