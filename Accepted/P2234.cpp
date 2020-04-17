@@ -47,10 +47,20 @@ int main()
 		b[i].id = i;
 	}
 	cnt = b[1].x;
-	sort(b + 1,b + n + 1);
+	sort(b + 1,b + n + 1,cmp);
 	for(int i = 1;i <= n;++i){
-		node *t = new node;
-		
+		a[i] = new node;
+		a[i]->x = b[i].x;
+		ins(a[i],head);
 	}
+	cout<<"---"<<endl;
+	for(node *p = head->next;p != tail;p = p->next)
+		cout<<p->x<<' ';
+	cout<<endl<<"---"<<endl;
+	for(int i = n;i >= 2;i--){
+		cnt += max(a[i]->x - a[i]->next->x,a[i]->x - a[i]->prev->x);
+		del(a[i]);
+	}
+	cout<<cnt<<endl;
 	return 0;
 }
