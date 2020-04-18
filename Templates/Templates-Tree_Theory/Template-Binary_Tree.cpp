@@ -1,29 +1,34 @@
 #include "Tree.h"
 
 struct node{
-	int left,right;
-}t[MAXN];
+	/* Data */
+	node *l,*r;
+	node(){
+		/* Data init*/
+		l = r = NULL;
+	}
+}T[NR];
 
-void pre_order(int x){//First root, second left, third right.
-	cout<<x<<endl;
-	if(t[x].left)
-		pre_order(t[x].left);
-	if(t[x].right)
-		pre_order(t[x].right);
+void preOrder(node *p){//root-left-right
+	if(p == NULL)
+		return;
+	/* Data operation*/
+	preOrder(p->l);
+	preOrder(p->r);
 }
 
-void in_order(int x){//First left, second root, third right.
-	if(t[x].left)
-		in_order(t[x].left);
-	cout<<x<<endl;
-	if(t[x].right)
-		in_order(t[x].right);
+void inOrder(node *p){//left-root-right
+	if(p == NULL)
+		return;
+	inOrder(p->l);
+	/* Data operation */
+	inOrder(p->r);
 }
 
-void post_order(int x){//First left, second right, third root.
-	if(t[x].left)
-		post_order(t[x].left);
-	if(t[x].right)
-		post_order(t[x].right);
-	cout<<x<<endl;
+void postOrder(ndoe *p){//lwft-right-root
+	if(p == NULL)
+		return;
+	postOrder(p->l);
+	postOrder(p->r);
+	/* Data operation */
 }
