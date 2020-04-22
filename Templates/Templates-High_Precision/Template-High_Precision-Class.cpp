@@ -1,159 +1,111 @@
 #include <bits/stdc++.h>
+#define _for(i, a, b) for(int i = (a); i <= (b); i++)
 using namespace std;
-
-struct ii:vector<int>{
-	ii(int n=0){
-		push_back(n);
-		check();
-	}
-	ii& check(){
-		while(!empty()&&!back())pop_back();
-		if(empty())return *this;
-		for(int i=1;i<size();++i){
-			(*this)[i]+=(*this)[i-1]/10;
-			(*this)[i-1]%=10;
-		}
-		while(back()>=10){
-			push_back(back()/10);
-			(*this)[size()-2]%=10;
-		}
-		return *this;
-	}
+ 
+const int MAXN = 112;
+const int base = 10000;
+struct node
+{
+	int len, s[505];
+	node() { len = 0; memset(s, 0, sizeof(s)); }
 };
-
-istream& operator>>(istream &is,ii &n){
-	string s;
-	is>>s;
-	n.clear();
-	for(int i=s.size()-1;i>=0;--i)
-		n.push_back(s[i]-'0');
-	return is;
+ 
+bool judge(node a, node b)
+{
+	if(a.len != b.len) return a.len > b.len;
+	for(int i = a.len; i >= 1; i--)
+		if(a.s[i] != b.s[i]) return a.s[i] > b.s[i];
+	return true;
 }
 
-ostream& operator<<(ostream &os,const ii &n){
-	if(n.empty())os<<0;
-	for(int i=n.size()-1;i>=0;--i)os<<n[i];
-	return os;
+node operator + (const node& a, const node& b) 
+{                                              
+	node c;
+	int& len = c.len = max(a.len, b.len);
+	
+	_for(i, 1, len)
+	{
+		c.s[i] += a.s[i] + b.s[i]; //这里一定是+=，不是= 
+		c.s[i+1] += c.s[i] / base;
+		c.s[i] %= base;
+	} 
+	
+	if(c.s[len+1]) len++;
+	return c;
 }
-
-bool operator!=(const ii &a,const ii &b){
-	if(a.size()!=b.size())return 1;
-	for(int i=a.size()-1;i>=0;--i)
-		if(a[i]!=b[i])return 1;
-	return 0;
-}
-
-bool operator==(const ii &a,const ii &b){
-	return !(a!=b);
-}
-
-bool operator<(const ii &a,const ii &b){
-	if(a.size()!=b.size())return a.size()<b.size();
-	for(int i=a.size()-1;i>=0;--i)
-		if(a[i]!=b[i])return a[i]<b[i];
-	return 0;
-}
-
-bool operator>(const ii &a,const ii &b){
-	return b<a;
-}
-
-bool operator<=(const ii &a,const ii &b){
-	return !(a>b);
-}
-
-bool operator>=(const ii &a,const ii &b){
-	return !(a<b);
-}
-
-ii& operator+=(ii &a,const ii &b){
-	if(a.size()<b.size())
-		a.resize(b.size());
-	for(int i=0;i!=b.size();++i)
-		a[i]+=b[i];
-	return a.check();
-}
-
-ii operator+(ii a,const ii &b){
-	return a+=b;
-}
-
-ii& operator-=(ii &a,ii b){
-	if(a<b)
-		swap(a,b);
-	for(int i=0;i!=b.size();a[i]-=b[i],++i)
-		if(a[i]<b[i]){
-			int j=i+1;
-			while(!a[j])
-				++j;
-			while(j>i){
-				--a[j];
-				a[--j]+=10;
-			}
-		}
-	return a.check();
-}
-
-ii operator-(ii a,const ii &b){
-	return a-=b;
-}
-
-ii operator*(const ii &a,const ii &b){
-	ii n;
-	n.assign(a.size()+b.size()-1,0);
-	for(int i=0;i!=a.size();++i)
-		for(int j=0;j!=b.size();++j)
-			n[i+j]+=a[i]*b[j];
-	return n.check();
-}
-
-ii& operator*=(ii &a,const ii &b){
-	return a=a*b;
-}
-
-ii divmod(ii &a,const ii &b){
-	ii ans;
-	for(int t=a.size()-b.size();a>=b;--t){
-		ii d;
-		d.assign(t+1,0);
-		d.back()=1;
-		ii c=b*d;
-		while(a>=c){
-			a-=c;
-			ans+=d;
-		}
+ 
+//高精度减法 
+node operator - (bignum a, const bignum& b)
+{
+	for(int i = a.len; i >= 1; i--)
+	{
+		a.s[i] -= b.s[i];
+		if(a.s[i] < 0) a.s[i+1]--, a.s[i] += base;
 	}
-	return ans;
-}
-
-ii operator/(ii a,const ii &b){
-	return divmod(a,b);
-}
-
-ii& operator/=(ii &a,const ii &b){
-	return a=a/b;
-}
-
-ii& operator%=(ii &a,const ii &b){
-	divmod(a,b);
+	while(!a.s[a.len] && a.len > 0) a.len--;
 	return a;
 }
-
-ii operator%(ii a,const ii &b){
-	return a%=b;
-}
-
-ii pow(const ii &n,const ii &k){
-	if(k.empty())
-		return 1;
-	if(k==2)
-		return n*n;
-	if(k.back()%2)
-		return n*pow(n,k-1);
-	return pow(pow(n,k/2),2);
-}
-
-int main()
+ 
+//高精度*高精度 
+node operator * (const node& a, const node& b)
 {
-	return 0;
+	node c;
+	int& len = c.len = b.len + a.len - 1;
+	
+	_for(i, 1, a.len)
+		_for(j, 1, b.len)
+		{
+			c.s[i+j-1] += a.s[i] * b.s[j];
+			c.s[i+j] += c.s[i+j-1] / base;
+			c.s[i+j-1] %= base;
+		}
+	
+	if(c.s[len+1]) len++;
+	return c;
+}
+ 
+//低精度*高精度 
+node operator * (const int& a, const node& b) //系统会根据数据类型来判断是低精度乘高精度还是高精度乘高精度 
+{
+	node c;
+	int& len = c.len = b.len;
+	
+	_for(i, 1, b.len)
+	{
+		c.s[i] += b.s[i] * a;
+		c.s[i+1] += c.s[i] / base;
+		c.s[i] %= base;
+	}
+	
+	while(c.s[len+1] > 0) 
+	{
+		c.len++;
+		c.s[len+1] += c.s[len] / base;
+		c.s[len] %= base;
+	}
+	
+	return c;
+}
+ 
+//读入
+char str[10000 + 5];
+void read(node& a) 
+{
+	scanf("%s", str);
+	reverse(str, str + strlen(str)); //先翻转再说 
+	int& len = a.len = 0;
+	for(int i = 0, w; i < strlen(str); i++, w *= 10)
+	{
+		if(i % 4 == 0) len++, w = 1;
+		a.s[len] += w * (str[i] - '0');
+	}
+}
+ 
+//输出
+void print(bignum a)
+{
+	printf("%d", a.s[a.len]);
+	for(int i = a.len - 1; i >= 1; i--)
+		printf("%04d", a.s[i]);
+	puts("");
 }
