@@ -4,13 +4,13 @@ using namespace std;
  
 const int MAXN = 112;
 const int base = 10000;
-struct node
+struct ii
 {
 	int len, s[505];
-	node() { len = 0; memset(s, 0, sizeof(s)); }
+	ii() { len = 0; memset(s, 0, sizeof(s)); }
 };
  
-bool judge(node a, node b)
+bool judge(ii a, ii b)
 {
 	if(a.len != b.len) return a.len > b.len;
 	for(int i = a.len; i >= 1; i--)
@@ -18,9 +18,9 @@ bool judge(node a, node b)
 	return true;
 }
 
-node operator + (const node& a, const node& b) 
+ii operator+ (const ii& a, const ii& b) 
 {                                              
-	node c;
+	ii c;
 	int& len = c.len = max(a.len, b.len);
 	
 	_for(i, 1, len)
@@ -35,7 +35,7 @@ node operator + (const node& a, const node& b)
 }
  
 //高精度减法 
-node operator - (bignum a, const bignum& b)
+ii operator- (ii a, const ii& b)
 {
 	for(int i = a.len; i >= 1; i--)
 	{
@@ -47,9 +47,9 @@ node operator - (bignum a, const bignum& b)
 }
  
 //高精度*高精度 
-node operator * (const node& a, const node& b)
+ii operator* (const ii& a, const ii& b)
 {
-	node c;
+	ii c;
 	int& len = c.len = b.len + a.len - 1;
 	
 	_for(i, 1, a.len)
@@ -65,9 +65,9 @@ node operator * (const node& a, const node& b)
 }
  
 //低精度*高精度 
-node operator * (const int& a, const node& b) //系统会根据数据类型来判断是低精度乘高精度还是高精度乘高精度 
+ii operator* (const int& a, const ii& b) //系统会根据数据类型来判断是低精度乘高精度还是高精度乘高精度 
 {
-	node c;
+	ii c;
 	int& len = c.len = b.len;
 	
 	_for(i, 1, b.len)
@@ -89,8 +89,7 @@ node operator * (const int& a, const node& b) //系统会根据数据类型来�
  
 //读入
 char str[10000 + 5];
-void read(node& a) 
-{
+void read(ii&a){
 	scanf("%s", str);
 	reverse(str, str + strlen(str)); //先翻转再说 
 	int& len = a.len = 0;
@@ -102,10 +101,19 @@ void read(node& a)
 }
  
 //输出
-void print(bignum a)
-{
+void print(ii a,char c = '\n'){
 	printf("%d", a.s[a.len]);
 	for(int i = a.len - 1; i >= 1; i--)
 		printf("%04d", a.s[i]);
-	puts("");
+	putchar(c);
+}
+
+int main()
+{
+	ii a,b;
+	read(a);read(b);
+	print(a + b);
+	print(a - b);
+	print(a * b);
+	return 0;
 }
