@@ -7,12 +7,11 @@ namespace io{inline int read(){register int x=0,flag=1;char c=getchar();while(c<
 #define mod % 10007
 
 const int NR = 2e5 + 10;
-int n,u,v,size,head[NR * 2],node[NR],maxn;
-ll cnt;
+int n,u,v,size,head[NR * 2],node[NR],maxn,cnt,s,m,m_;
 struct edge{int to,next,d;}g[NR * 2];
 
 void add(int u,int v){
-	g[++size] = (edge){v,head[u]};
+	g[++size] =(edge){v,head[u]};
 	++g[size].d;
 	head[u] = size;
 }
@@ -27,16 +26,26 @@ int main()
 	}
 	for(int i = 1;i <= n;++i)
 		node[i] = in;
-	for(int i = 1;i <= n;++i)
-		for(int j = head[i];j;j = g[j].next)
-			for(int k = head[i];k;k = g[k].next){
-				u = g[j].to,v = g[k].to;
-				if(u == v)
-					continue;
-				maxn = max(maxn,node[u] * node[v]);
-				cnt += node[u] * node[v];
+	cnt = maxn = 0;
+	for(int i = 1;i <= n;i++){
+		s = m = m_ = 0;
+		for(int j = head[i];j;j = g[j].next){
+			s += node[g[j].to];
+			m_ = max(m_,node[g[j].to]);
+			if(m_ > m){ 
+				int t = m_;
+				m_ = m;
+				m = t;
 			}
+		}
+		maxn = max(maxn,m * m_);
+		for(int j = head[i];j;j = g[j].next){
+			int val = 1ll *(s - node[g[j].to])* node[g[j].to]mod;
+			cnt += val;
+			cnt %= 10007;
+		}
+	}
 	print(maxn,' ');
-	print(cnt % 10007);
+	print(cnt);
 	return 0;
 }
