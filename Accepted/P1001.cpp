@@ -5,11 +5,8 @@ namespace io{inline int read(){register int x=0,flag=1;char c=getchar();while(c<
 #define in io::read()
 #define print io::write
 
-int a,b;
-
 int main()
 {
-	a = in;b = in;
-	print(a + b);
+	print(in + in);
 	return 0;
 }
