@@ -13,8 +13,8 @@ struct Edge{
     int u,v,w,next;
 }G[N<<1];
 inline void addedge(int u,int v,int w){
-    G[++tot].u=u;G[tot].v=v;G[tot].w=w;G[tot].next=head[u];head[u]=tot;
-    G[++tot].u=v;G[tot].v=u;G[tot].w=w;G[tot].next=head[v];head[v]=tot;
+    G[++tot] = (edge){u,v,w,head[u]};head[u] = tot;
+    G[++tot] = (edge){v,u,w,head[v]};head[v] = tot;
 }
 inline void dfs(int u,int fa){
     for(int i=head[u];i;i=G[i].next){
