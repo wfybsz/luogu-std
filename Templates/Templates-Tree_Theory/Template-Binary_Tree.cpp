@@ -4,20 +4,20 @@ struct node{
 	/* Data */
 	node *l,*r;
 	node(){
-		/* Data init*/
+		/* Data init */
 		l = r = NULL;
 	}
 }T[NR];
 
-void preOrder(node *p){//root-left-right
+void preOrder(node *p){// root-left-right
 	if(p == NULL)
 		return;
-	/* Data operation*/
+	/* Data operation */
 	preOrder(p->l);
 	preOrder(p->r);
 }
 
-void inOrder(node *p){//left-root-right
+void inOrder(node *p){// left-root-right
 	if(p == NULL)
 		return;
 	inOrder(p->l);
@@ -25,7 +25,7 @@ void inOrder(node *p){//left-root-right
 	inOrder(p->r);
 }
 
-void postOrder(ndoe *p){//lwft-right-root
+void postOrder(ndoe *p){// left-right-root
 	if(p == NULL)
 		return;
 	postOrder(p->l);
