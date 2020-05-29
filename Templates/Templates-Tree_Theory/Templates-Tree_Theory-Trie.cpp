@@ -27,7 +27,7 @@ namespace trie{
 		}
 	};
 	template<classT,size_t CHILD_MAX=127>
-	classtrie{
+	class trie{
 private:
 		nod<T,CHILD_MAX>root;
 public:
