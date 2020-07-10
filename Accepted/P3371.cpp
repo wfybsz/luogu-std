@@ -7,26 +7,51 @@ namespace io{inline int read(){register int x=0,flag=1;char c=getchar();while(c<
 
 const int NR = 1e4 + 10;
 const int MR = 5e5 + 10;
-int n,m,s,u[MR],v[MR],w[MR],dis[NR];
-bool flag = true;
+int n,m,s,size,head[NR],dis[NR],u,v,w;
+bool flag[NR];
+struct edge{
+	int to,next,w;
+}g[MR];
+
+void add(int u,int v,int w){
+	g[++size] = (edge){v,head[u],w};
+	head[u] = size;
+}
+
+void spfa(int s){
+	queue<int>q;
+	q.push(s);
+	memset(dis,999999,sizeof(dis));
+	dis[s] = 0;
+	while(!q.empty()){
+		u = q.front();
+		q.pop();
+		flag[u] = false;
+		for(int i = head[u];i;i = g[i].next){
+			v = g[i].to,w = g[i].w;
+			if(dis[u] + w >= dis[v])
+				continue;
+			dis[v] = dis[u] + w;
+			if(flag[v])
+				continue;
+			flag[v] = true;
+			q.push(v);
+		}
+	}
+}
 
 int main()
 {
-	memset(dis,999999,sizeof(dis));
 	n = in;m = in;s = in;
-	dis[s] = 0;
 	for(int i = 1;i <= m;++i){
-		u[i] = in;v[i] = in;w[i] = in;
+		u = in;v = in;w = in;
+		add(u,v,w);
 	}
-	while(flag){
-		flag = false;
-		for(int i = 1;i <= m;++i)
-			if(dis[u[i]] + w[i] < dis[v[i]]){
-				dis[v[i]] = dis[u[i]] + w[i];
-				flag = true;
-			}
-	}
+	spfa(s);
 	for(int i = 1;i <= n;++i)
-		print(dis[i] > 1e9?2147483647:dis[i],' ');
+		if(dis[i] > 1e9)
+			print(2147483647,' ');
+		else
+			print(dis[i],' ');
 	return 0;
 }
