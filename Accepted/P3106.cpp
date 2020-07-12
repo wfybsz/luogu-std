@@ -1,39 +1,50 @@
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;
-namespace io{inline int read(){register int x=0,flag=1;char c=getchar();while(c<'0'||c>'9'){if(c=='-')flag=0;c=getchar();}while(c>='0'&&c<='9'){x=(x<<1)+(x<<3)+(c^48);c=getchar();}if(flag)return x;return ~(x-1);}inline void write(int x,char end='\n'){int s[20];register int top=0;if(x<0){putchar('-');x=~(x-1);}while(x){s[++top]=x%10;x/=10;}if(!top)s[++top]=0;while(top)putchar(s[top--]^48);if(end!=0)putchar(end);}}
+namespace io{inline int read(){int x=0,flag=1;char c=getchar();while(c<'0'||c>'9'){if(c=='-')flag=0;c=getchar();}while(c>='0'&&c<='9'){x=(x<<1)+(x<<3)+(c^48);c=getchar();}if(flag)return x;return ~(x-1);}inline void write(int x,char end='\n'){int s[20];int top=0;if(x<0){putchar('-');x=~(x-1);}while(x){s[++top]=x%10;x/=10;}if(!top)s[++top]=0;while(top)putchar(s[top--]^48);if(end!=0)putchar(end);}}
 #define in io::read()
 #define print io::write
 
 const int NR = 1e4 + 10;
 const int MR = 5e4 + 10;
-int n,m,u,v,w,w_,size,size_,size__,head[3][NR],dis[3][NR];
+int n,m,size,size_,u,v,w,w_,dis1[NR],dis2[NR],dis3[NR],head[NR];
 bool vis[NR];
-struct edge{int to,next,w;}g[3][MR];
+struct edge{int from,to,w,w_;}g[MR];
+struct edge_{int next,to,w;}g_[MR];
+struct qu{
+	int to,w;
+	bool operator<(const qu&b)const{return w > b.w;}
+};
+priority_queue<qu>q;
 
-void add(int &size,int head[],edge g[],int u,int v,int w){
-	g[++size] = (edge){v,head[u],w};
-	head[u] = size;
+void add(int u,int v,int w){
+	g_[++size_] = (edge_){head[u],v,w};
+	head[u] = size_;
 }
 
-void spfa(int s,edge g[],int head[],int id){
-	queue<int>q;
-	memset(dis[id],999999,sizeof(dis[id]));
-	memset(vis,false,sizeof(vis));
-	q.push(s);
-	dis[id][s] = 0;
+void dij(int u,int dis[]){
+	qu tmp;
+	for(int i = 1;i <= n;++i){
+		dis[i] = 2147483647;
+		vis[i] = false;
+	}
+	tmp.to = u;
+	tmp.w = 0;
+	dis[u]=0;
+	q.push(tmp);
 	while(!q.empty()){
-		u = q.front();
+		u = q.top().to;
 		q.pop();
-		vis[u] = false;
-		for(int i = head[u];i;i = g[i].next){
-			v = g[i].to;
-			if(dis[id][u] + g[i].w < dis[id][v]){
-				dis[id][v] = dis[id][u] + g[i].w;
-				if(!vis[v]){
-					q.push(v);
-					vis[v] = true;
-				}
+		if(vis[u])
+			continue;
+		vis[u] = true;
+		for(int i = head[u];i;i = g_[i].next){
+			v = g_[i].to;
+			if(!vis[v] and dis[u] + g_[i].w < dis[v]){
+				dis[v] = dis[u] + g_[i].w;
+				tmp.to = v;
+				tmp.w = dis[v];
+				q.push(tmp);
 			}
 		}
 	}
@@ -43,19 +54,35 @@ int main()
 {
 	n = in;m = in;
 	for(int i = 1;i <= m;++i){
-		u = in;v = in;w = in;w_ = in;
-		add(size,head[0],g[0],v,u,w);
-		add(size_,head[1],g[1],v,u,w_);
+		g[i].to = in;
+		g[i].from = in;
+		g[i].w = in;
+		g[i].w_ = in;
 	}
-	spfa(n,g[0],head[0],0);
-	spfa(n,g[1],head[1],1);
+	memset(head,0,sizeof(head));
+	memset(g_,0,sizeof(g_));
+	size_ = 0;
+	for(int i = 1;i <= m;++i)
+		add(g[i].from,g[i].to,g[i].w);
+	dij(n,dis1);
+	memset(head,0,sizeof(head));
+	memset(g_,0,sizeof(g_));
+	size_ = 0;
+	for(int i = 1;i <= m;++i)
+		add(g[i].from,g[i].to,g[i].w_);
+	dij(n,dis2);
+	memset(head,0,sizeof(head));
+	memset(g_,0,sizeof(g_));
+	size_ = 0;
 	for(int i = 1;i <= m;++i){
-		int cnt = 0,x = i,y = g[0][i].to;
-		cnt += dis[0][y] != dis[0][x] + g[0][x].w;
-		cnt += dis[1][y] != dis[1][x] + g[1][x].w;
-		add(size__,head[2],g[2],y,x,cnt);
+		int cnt = 0;
+		if(dis1[g[i].to] != dis1[g[i].from] + g[i].w)
+			++cnt;
+		if(dis2[g[i].to] != dis2[g[i].from] + g[i].w_)
+			++cnt;
+		add(g[i].from,g[i].to,cnt);
 	}
-	spfa(1,g[2],head[2],2);
-	print(dis[2][n]);
+	dij(n,dis3);
+	print(dis3[1]);
 	return 0;
 }
