@@ -2,3 +2,4 @@
 .vscode
 *.cpp~
 *.o
+test.cpp
