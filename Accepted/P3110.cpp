@@ -8,7 +8,7 @@ namespace io{inline int read(){register int x=0,flag=1;char c=getchar();while(c<
 const int NR = 4e4 + 10;
 int n,m,b,e,p,dis[3][NR],size,head[NR],u,v,minn = 2147483647;
 bool vis[NR];
-struct edge{int to,next,w;}g[NR];
+struct edge{int to,next,w;}g[2 * NR];
 
 void add(int u,int v,int w){
 	g[++size] = (edge){v,head[u],w};
