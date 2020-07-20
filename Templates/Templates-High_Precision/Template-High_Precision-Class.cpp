@@ -7,7 +7,7 @@ using namespace std;
 #define __BIGINT_BASE__ 100000000
 
 struct ii {
-	static char s[__BIGINT_MAXIMUM_LENGTH__*10];
+	static char s[__BIGINT_MAXIMUM_LENGTH__ * 10];
 	typedef int _T;
 	_T a[__BIGINT_MAXIMUM_LENGTH__];
 	int len;
