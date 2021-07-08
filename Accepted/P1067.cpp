@@ -15,25 +15,26 @@ int main() {
 	n = in;
 	for ( int i = 0; i <= n; ++i )
 		a[i] = in;
-	if(a[0] == -1)
-		printf("-x^%d",n);
-	else if(a[0] == 1)
-		printf("x^%d",n);
-	else if(a[0] != 0)
-		printf("%dx^%d",a[0],n);
-	for(int i = 1;i < n;++i){
-		if(a[i] == 0)
+	if ( a[0] == -1 )
+		printf( "-x^%d", n );
+	else
+		if ( a[0] == 1 )
+			printf( "x^%d", n );
+		else
+			if ( a[0] != 0 )
+				printf( "%dx^%d", a[0], n );
+	for ( int i = 1; i < n; ++i ) {
+		if ( a[i] == 0 )
 			continue;
-		if(a[i] < 0)
-			putchar('-');
+		if ( a[i] < 0 )
+			putchar( '-' );
 		else
-			putchar('+');
-		a[i] = abs(a[i]);
-		if(a[i] == 1)
-			printf("x^%d",n - i);
+			putchar( '+' );
+		a[i] = abs( a[i] );
+		if ( a[i] == 1 )
+			printf( "x^%d", n - i );
 		else
-			printf("%dx^%d",a[i],n - i);
+			printf( "%dx^%d", a[i], n - i );
 	}
-	
 	return 0;
 }
